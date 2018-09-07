@@ -40,5 +40,5 @@ func main() {
 }
 ```
 
-[godoc]: http://godoc.org/github.com/ewwwwwqm/jsonresp
-[godoc-img]: https://godoc.org/github.com/ewwwwwqm/jsonresp?status.svg
+[godoc]: http://godoc.org/github.com/epiqm/seq
+[godoc-img]: https://godoc.org/github.com/epiqm/seq?status.svg
