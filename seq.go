@@ -11,6 +11,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"os"
 )
 
 // Performs MD5 hashing operation on given text.
@@ -110,4 +112,41 @@ func Decode(text string, key string) (s string) {
 		s = fmt.Sprintf("%s", ciphertext)
 		return
 	}
+}
+
+// Reads file contents to string.
+func ReadFile(path string) (string, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+// Writes text string to file.
+func WriteFile(path string, text string) error {
+	err := ioutil.WriteFile(path, []byte(text), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Creates a file.
+func CreateFile(path string) error {
+	f, err := os.Create(path)
+	f.Close()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Deletes file.
+func RmFile(path string) error {
+	err := os.Remove(path)
+	if err != nil {
+		return err
+	}
+	return nil
 }

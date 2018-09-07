@@ -73,3 +73,51 @@ func ExampleDecode() {
 	// Output:
 	// A message for encoding.
 }
+
+func ExampleCreateFile() {
+	err := seq.CreateFile("testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}
+
+func ExampleWriteFile() {
+	err := seq.WriteFile("testing.txt", "A testing text file.")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}
+
+func ExampleReadFile() {
+	text, err := seq.ReadFile("testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(text)
+	// Output:
+	// A testing text file.
+}
+
+func ExampleRmFile() {
+	err := seq.RmFile("testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}
