@@ -51,3 +51,25 @@ func ExampleUnmarshal() {
 	// Output:
 	// {Max Kiev 27}
 }
+
+func ExampleEncode() {
+	key := ""
+	text := "A message for encoding."
+
+	s := seq.Encode(text, key)
+
+	fmt.Println(s)
+	// Output:
+	// QSBtZXNzYWdlIGZvciBlbmNvZGluZy4=
+}
+
+func ExampleDecode() {
+	key := ""
+	text := "QSBtZXNzYWdlIGZvciBlbmNvZGluZy4="
+
+	s := seq.Decode(text, key)
+
+	fmt.Println(s)
+	// Output:
+	// A message for encoding.
+}
