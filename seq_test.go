@@ -110,6 +110,30 @@ func ExampleReadFile() {
 	// A testing text file.
 }
 
+func ExampleCopyFile() {
+	err := seq.CopyFile("testing.txt", "testing.txt.copy")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}
+
+func ExampleMoveFile() {
+	err := seq.MoveFile("testing.txt.copy", "testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}
+
 func ExampleRmFile() {
 	err := seq.RmFile("testing.txt")
 	if err != nil {

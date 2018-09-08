@@ -150,3 +150,36 @@ func RmFile(path string) error {
 	}
 	return nil
 }
+
+// Moves file to the new path.
+func MoveFile(oldpath string, newpath string) error {
+	err := os.Rename(oldpath, newpath)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Copies file to the new path.
+func CopyFile(path string, newpath string) error {
+	in, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+	out, err := os.Create(newpath)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+	if _, err = io.Copy(out, in); err != nil {
+		return err
+	}
+	err = out.Sync()
+	return nil
+}
