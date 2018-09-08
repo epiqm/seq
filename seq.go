@@ -183,3 +183,31 @@ func CopyFile(path string, newpath string) error {
 	err = out.Sync()
 	return nil
 }
+
+// Encodes/encrypts contents and rewrites the file.
+func EncodeFile(path string, key string) error {
+	text, err := ReadFile(path)
+	if err != nil {
+		return err
+	}
+	enc := Encode(text, key)
+	err = WriteFile(path, enc)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Decodes/decrypts contents and rewrites the file.
+func DecodeFile(path string, key string) error {
+	text, err := ReadFile(path)
+	if err != nil {
+		return err
+	}
+	dec := Decode(text, key)
+	err = WriteFile(path, dec)
+	if err != nil {
+		return err
+	}
+	return nil
+}

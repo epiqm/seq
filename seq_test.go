@@ -134,6 +134,42 @@ func ExampleMoveFile() {
 	// OK
 }
 
+func ExampleEncodeFile() {
+	err := seq.EncodeFile("testing.txt", "")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	text, err := seq.ReadFile("testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(text)
+	// Output:
+	// QSB0ZXN0aW5nIHRleHQgZmlsZS4=
+}
+
+func ExampleDecodeFile() {
+	err := seq.DecodeFile("testing.txt", "")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	text, err := seq.ReadFile("testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(text)
+	// Output:
+	// A testing text file.
+}
+
 func ExampleRmFile() {
 	err := seq.RmFile("testing.txt")
 	if err != nil {
