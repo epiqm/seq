@@ -181,3 +181,48 @@ func ExampleRmFile() {
 	// Output:
 	// OK
 }
+
+func ExampleCreateDir() {
+	err := seq.CreateDir("newdir")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	err = seq.WriteFile("newdir/testing.txt", "Another test file.")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}
+
+func ExampleLs() {
+	files, err := seq.Ls("newdir")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for _, f := range files {
+		fmt.Println(f)
+	}
+
+	// Output:
+	// testing.txt
+}
+
+func ExampleRmDir() {
+	err := seq.RmDir("newdir")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("OK")
+	// Output:
+	// OK
+}

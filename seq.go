@@ -211,3 +211,33 @@ func DecodeFile(path string, key string) error {
 	}
 	return nil
 }
+
+// Creates a directory.
+func CreateDir(path string) error {
+	err := os.MkdirAll(path, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Lists a directory.
+func Ls(path string) (fm []string, err error) {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+	for _, f := range files {
+		fm = append(fm, f.Name())
+	}
+	return
+}
+
+// Removes a directory.
+func RmDir(path string) error {
+	err := os.RemoveAll(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
