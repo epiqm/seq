@@ -1,4 +1,8 @@
 // Package for encoding/decoding data sequences.
+//
+// A functional library for performing common operations
+// on data. Rand, MD5 hash, Base64 encode/decode,
+// AES(CBC) encryption/decryption.
 package seq
 
 import (
@@ -9,11 +13,20 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	mr "math/rand"
 	"os"
+	"time"
 )
+
+// Generates random number between min and max.
+func Rand(min, max int) int {
+	mr.Seed(time.Now().Unix())
+	return mr.Intn(max-min) + min
+}
 
 // Performs MD5 hashing operation on given text.
 func Hash(text string) string {
@@ -45,72 +58,72 @@ func Unmarshal(text string, s interface{}) {
 
 // Returns Base64 encoded string from text.
 // Uses AES(CBC) encryption if key is present.
-func Encode(text string, key string) (s string) {
+func Encode(text string, key string) (s string, err error) {
 	keyEnc := []byte(key)
 	plaintext := []byte(text)
-
 	if len(key) == 0 {
 		s = base64.StdEncoding.EncodeToString(plaintext)
-		return
 	} else {
 		if len(plaintext)%aes.BlockSize != 0 {
-			return
+			err := errors.New("decode: cipher text is too short")
+			return "", err
 		}
 
 		block, err := aes.NewCipher(keyEnc)
 		if err != nil {
-			return
+			return "", err
 		}
 
 		ciphertext := make([]byte, aes.BlockSize+len(plaintext))
 		iv := ciphertext[:aes.BlockSize]
 		if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-			return
+			return "", err
 		}
 
 		mode := cipher.NewCBCEncrypter(block, iv)
 		mode.CryptBlocks(ciphertext[aes.BlockSize:], plaintext)
 
 		s = fmt.Sprintf("%x", ciphertext)
-		return
 	}
-	return
+	return s, nil
 }
 
 // Decodes/decrypts Base64 string.
-func Decode(text string, key string) (s string) {
+func Decode(text string, key string) (s string, err error) {
 	if len(key) == 0 {
 		data, err := base64.StdEncoding.DecodeString(text)
 		if err != nil {
-			return "failed to decode"
+			return "", err
 		}
 		s = string(data)
-		return
+		return s, nil
 	} else {
 		keyEnc := []byte(key)
 		ciphertext, _ := hex.DecodeString(text)
 
 		block, err := aes.NewCipher(keyEnc)
 		if err != nil {
-			return
+			return "", err
 		}
 
 		if len(ciphertext) < aes.BlockSize {
-			return "cipher text is too short"
+			err := errors.New("decode: cipher text is too short")
+			return "", err
 		}
 
 		iv := ciphertext[:aes.BlockSize]
 		ciphertext = ciphertext[aes.BlockSize:]
 
 		if len(ciphertext)%aes.BlockSize != 0 {
-			return "ciphertext is not a multiple of the block size"
+			err := errors.New("decode: ciphertext is not a multiple of the block size")
+			return "", err
 		}
 
 		mode := cipher.NewCBCDecrypter(block, iv)
 		mode.CryptBlocks(ciphertext, ciphertext)
 
 		s = fmt.Sprintf("%s", ciphertext)
-		return
+		return s, nil
 	}
 }
 
@@ -190,7 +203,10 @@ func EncodeFile(path string, key string) error {
 	if err != nil {
 		return err
 	}
-	enc := Encode(text, key)
+	enc, err := Encode(text, key)
+	if err != nil {
+		return err
+	}
 	err = WriteFile(path, enc)
 	if err != nil {
 		return err
@@ -204,7 +220,10 @@ func DecodeFile(path string, key string) error {
 	if err != nil {
 		return err
 	}
-	dec := Decode(text, key)
+	dec, err := Decode(text, key)
+	if err != nil {
+		return err
+	}
 	err = WriteFile(path, dec)
 	if err != nil {
 		return err

@@ -2,9 +2,23 @@ package seq_test
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/epiqm/seq"
 )
+
+func TestRand(t *testing.T) {
+	number := seq.Rand(1, 100)
+
+	if number < 1 && number > 100 {
+		t.Errorf("Rand failed, got: %d, want range 1-100", number)
+	}
+}
+
+func ExampleRand(t *testing.T) {
+	number := seq.Rand(1, 100)
+	fmt.Println(number)
+}
 
 func ExampleHash() {
 	hash := seq.Hash("some text")
@@ -56,7 +70,11 @@ func ExampleEncode() {
 	key := ""
 	text := "A message for encoding."
 
-	s := seq.Encode(text, key)
+	s, err := seq.Encode(text, key)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	fmt.Println(s)
 	// Output:
@@ -67,7 +85,11 @@ func ExampleDecode() {
 	key := ""
 	text := "QSBtZXNzYWdlIGZvciBlbmNvZGluZy4="
 
-	s := seq.Decode(text, key)
+	s, err := seq.Decode(text, key)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	fmt.Println(s)
 	// Output:
