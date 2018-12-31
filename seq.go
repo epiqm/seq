@@ -127,6 +127,16 @@ func Decode(text string, key string) (s string, err error) {
 	}
 }
 
+// Gets length of a file (in bytes)
+// Returns size as int64
+func GetFileSize(path string) (int64, error) {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return 0, err
+	}
+	return fi.Size(), nil
+}
+
 // Reads file contents to string.
 func ReadFile(path string) (string, error) {
 	data, err := ioutil.ReadFile(path)

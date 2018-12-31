@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/epiqm/seq"
+	"seq"
 )
 
 func TestRand(t *testing.T) {
@@ -94,6 +94,24 @@ func ExampleDecode() {
 	fmt.Println(s)
 	// Output:
 	// A message for encoding.
+}
+
+func ExampleGetFileSize() {
+	err := seq.WriteFile("testing.txt", "MAX")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fsize, err := seq.GetFileSize("testing.txt")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(fsize)
+	// Output:
+	// 3
 }
 
 func ExampleCreateFile() {
