@@ -106,6 +106,16 @@ fmt.Println(s)
 // A message for encoding.
 ```
 
+##### Get file size in bytes
+
+```go
+fsize, err := seq.GetFileSize("testing.txt")
+if err != nil {
+        fmt.Println(err)
+        return
+}
+```
+
 ##### Create a file
 
 ```go
