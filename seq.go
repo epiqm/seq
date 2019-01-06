@@ -36,6 +36,15 @@ func Hash(text string) string {
 	return rs
 }
 
+// Performs MD5 hashing operation on given text.
+// Returns string with length that was specified
+func Hashcut(text string, length int) string {
+	h := md5.New()
+	h.Write([]byte(text))
+	rs := hex.EncodeToString(h.Sum(nil))
+	return rs[:length]
+}
+
 // Outputs JSON string from structure.
 func Marshal(m map[string]interface{}) (s string) {
 	b, err := json.Marshal(m)
