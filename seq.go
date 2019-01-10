@@ -36,8 +36,17 @@ func Hash(text string) string {
 	return rs
 }
 
+// Performs MD5 hashing operation on given text.
+// Returns string with specified length.
+func HashCut(text string, length int) string {
+	h := md5.New()
+	h.Write([]byte(text))
+	rs := hex.EncodeToString(h.Sum(nil))
+	return rs[:length]
+}
+
 // Outputs JSON string from structure.
-func Marshal(m map[string]interface{}) (s string) {
+func Marshal(m interface{}) (s string) {
 	b, err := json.Marshal(m)
 	if err != nil {
 		s = ""
@@ -65,7 +74,7 @@ func Encode(text string, key string) (s string, err error) {
 		s = base64.StdEncoding.EncodeToString(plaintext)
 	} else {
 		if len(plaintext)%aes.BlockSize != 0 {
-			err := errors.New("decode: cipher text is too short")
+			err := errors.New("encode: plaintext is not a multiple of the block size")
 			return "", err
 		}
 
@@ -125,16 +134,6 @@ func Decode(text string, key string) (s string, err error) {
 		s = fmt.Sprintf("%s", ciphertext)
 		return s, nil
 	}
-}
-
-// Gets length of a file (in bytes)
-// Returns size as int64
-func GetFileSize(path string) (int64, error) {
-	fi, err := os.Stat(path)
-	if err != nil {
-		return 0, err
-	}
-	return fi.Size(), nil
 }
 
 // Reads file contents to string.
@@ -239,6 +238,16 @@ func DecodeFile(path string, key string) error {
 		return err
 	}
 	return nil
+}
+
+// Gets length of a file (in bytes)
+// Returns size as int64
+func GetFileSize(path string) (int64, error) {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return 0, err
+	}
+	return fi.Size(), nil
 }
 
 // Creates a directory.

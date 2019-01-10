@@ -28,6 +28,14 @@ func ExampleHash() {
 	// 552e21cd4cd9918678e3c1a0df491bc3
 }
 
+func ExampleHashCut() {
+	shortHash := seq.HashCut("some text", 3)
+
+	fmt.Println(shortHash)
+	// Output:
+	// 552
+}
+
 func ExampleMarshal() {
 	// prepare our object to perform marshal
 	obj := map[string]interface{}{
