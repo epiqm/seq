@@ -7,6 +7,33 @@ import (
 	"seq"
 )
 
+func TestRoundUp(t *testing.T) {
+	roundedUp := seq.RoundUp(97.8021978021978, 2)
+	expect := 97.81
+
+	if roundedUp != expect {
+		t.Errorf("RoundUp failed, got %v, want %v", roundedUp, expect)
+	}
+}
+
+func TestPercent(t *testing.T) {
+	percent := seq.Percent(22, 1001)
+	expect := 97.8021978021978
+
+	if percent != expect {
+		t.Errorf("Percent failed, got %v, want %v", percent, expect)
+	}
+}
+
+func TestPercentage(t *testing.T) {
+	percentage := seq.Percentage(22, 1001)
+	expect := "97.81%"
+
+	if percentage != expect {
+		t.Errorf("Percentage failed, got %s, want %s", percentage, expect)
+	}
+}
+
 func TestRand(t *testing.T) {
 	number := seq.Rand(1, 100)
 

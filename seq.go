@@ -1,8 +1,6 @@
 // Package for encoding/decoding data sequences.
 //
-// A functional library for performing common operations
-// on data. Rand, MD5 hash, Base64 encode/decode,
-// AES(CBC) encryption/decryption.
+// A functional library for performing basic data operations.
 package seq
 
 import (
@@ -17,10 +15,33 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	m "math"
 	mr "math/rand"
 	"os"
 	"time"
 )
+
+// Returns percentage of two values.
+func Percentage(s, f int) string {
+	return fmt.Sprintf("%v%s", RoundUp(Percent(s, f), 2), "%")
+}
+
+// Gets percentage of two values.
+// Note: first value should be lower.
+func Percent(s, f int) (delta float64) {
+	diff := float64(f - s)
+	delta = (diff / float64(f)) * 100
+	return
+}
+
+// Returns rounded float64 number.
+func RoundUp(input float64, places int) (rounded float64) {
+	var round float64
+	pow := m.Pow(10, float64(places))
+	digit := pow * input
+	round = m.Ceil(digit)
+	return round / pow
+}
 
 // Generates random number between min and max.
 func Rand(min, max int) int {
